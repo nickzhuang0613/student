@@ -11,6 +11,11 @@ config_file_name = config_dir + config_file
 def add_admin(): #添加管理员
     with open(config_file_name,'a',encoding='utf-8') as f:
         name=(input("请输入用户名："))
+        while True:
+            if name in user:
+                name = input("用户已经存在，请重新输入：")
+            else:
+                break
         passwd = input("请输入密码：")
         while True:
             if 'non_compliant_agreement_eof' == en_code(passwd): #密码有效性检查
@@ -25,7 +30,8 @@ def add_admin(): #添加管理员
         passwd = en_code(passwd) #密码存档
         f.write(name+':'+passwd+'\n')
         user[name]=passwd
-  
+        print("添加成功")
+        
 def del_admin(): #删除管理员
     while True:
         if not user: #判断是否非空
