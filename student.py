@@ -36,7 +36,11 @@ def student_data_add():
             en_src=input("英语成绩")
             s=name+':'+sex+':'+age+':'+src_ch+':'+math_src+':'+en_src+'\n'
             f.write(s)
-            students[name]=s
+
+            data_list=s.rstrip('\n').split(':')
+            students[data_list[0]]=data_list[1:3]
+            students[data_list[0]].append(data_list[3:])
+
             sele=input('是否继续录入n/[y]:')
             if 'y' ==  sele or 'Y' == sele or '' == sele:
                continue
