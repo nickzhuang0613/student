@@ -1,5 +1,5 @@
 # -*- coding:utf-8 -*-
-from namespace import *
+from namespace import user
 import os
 import sys
 from de_en_code import *
@@ -42,15 +42,52 @@ def del_admin(): #删除管理员
             print("输入用户"+del_user+"不存在")
         else:
             info = ''
-            f = open(config_file_name,'w',encoding='utf-8')
             for key in user: #删除指定行
                 if key != del_user:
                     info += (key + ':' + user[key] + '\n')
+            f = open(config_file_name,'w',encoding='utf-8')
             f.write(info)
             f.close()
             del user[del_user] #更新已经导入的用户信息表
             print("删除成功")
         sele = input("是否继续删除用户信息y/n:")
+        if 'y' ==  sele or 'Y' == sele or '' == sele:
+            continue
+        else:
+            break;
+
+def modify_admin(): #删除管理员
+    while True:
+        if not user: #判断是否非空
+            print("目前暂时没有用户")
+            break
+        modify_user = input("请输入需要修改的用户：")
+        if modify_user not in user:  #判断输入是否存在
+            print("输入用户"+modify_user+"不存在")
+        else:
+            passwd=input('请输入新的密码:')
+            while True:
+                if 'non_compliant_agreement_eof' == en_code(passwd): #密码有效性检查
+                    passwd = input("密码不符合加密协议，请重新输入:")
+                else:
+                    break
+            while True:
+                if passwd == input("请再次输入密码："):
+                    break
+                else:
+                    passwd = input("密码不一致，请重新设置：")
+            info = ''
+            for key in user: 
+                if key != modify_user:
+                    info += (key + ':' + user[key] + '\n')
+            passwd = en_code(passwd) #密码存档
+            info+=(modify_user+':'+passwd+'\n')
+            user[modify_user] = passwd
+            f = open(config_file_name,'w',encoding='utf-8')
+            f.write(info)
+            f.close()
+            print("修改成功")
+        sele = input("是否继续修改其他用户信息y/n:")
         if 'y' ==  sele or 'Y' == sele or '' == sele:
             continue
         else:
@@ -72,11 +109,13 @@ def get_admin_info():
     for info in open(config_file_name,encoding='utf-8'):
         l = info.split(":")
         user[''.join(l[0])] = (''.join(l[1])).rstrip('\n')  #去掉换行
-  
+
+
 def show_admin():
     if not user:
         print("暂时没有添加任何用户。")
         return
+    print('账号','\t','--->\t','密码')
     for key in user:
         print(key,'\t','--->\t',de_code(user[key]))
         
