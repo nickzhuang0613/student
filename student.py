@@ -23,29 +23,28 @@ def student_data_init():
             students[data_list[0]].append(data_list[3:])
 
 def student_data_add():
-    with open(student_data_name,'a',encoding='utf-8') as f:
-        while True:
-            name=input("学生名：")
-            if name in students:
-                sel=input("学生已经存在,按任意键继续")
-                continue
-            sex=input("性别：")
-            age=input("年龄：")
-            src_ch=input("语文成绩：")
-            math_src=input("数学成绩：")
-            en_src=input("英语成绩")
-            s=name+':'+sex+':'+age+':'+src_ch+':'+math_src+':'+en_src+'\n'
+    while True:
+        name=input("学生名：")
+        if name in students:
+            sel=input("学生已经存在,按任意键继续")
+            continue
+        sex=input("性别：")
+        age=input("年龄：")
+        src_ch=input("语文成绩：")
+        math_src=input("数学成绩：")
+        en_src=input("英语成绩")
+        s=name+':'+sex+':'+age+':'+src_ch+':'+math_src+':'+en_src+'\n'
+        with open(student_data_name,'a',encoding='utf-8') as f:
             f.write(s)
+        data_list=s.rstrip('\n').split(':')
+        students[data_list[0]]=data_list[1:3]
+        students[data_list[0]].append(data_list[3:])
 
-            data_list=s.rstrip('\n').split(':')
-            students[data_list[0]]=data_list[1:3]
-            students[data_list[0]].append(data_list[3:])
-
-            sele=input('是否继续录入n/[y]:')
-            if 'y' ==  sele or 'Y' == sele or '' == sele:
-               continue
-            else:
-               break;
+        sele=input('是否继续录入n/[y]:')
+        if 'y' ==  sele or 'Y' == sele or '' == sele:
+           continue
+        else:
+           break;
 
 def student_data_show(name='NULL'):
     if name == 'NULL':
@@ -67,7 +66,7 @@ def student_data_del():
             break
         del_student = input("请输入需要删除的学生：")
         if del_student not in students:  #判断输入是否存在
-            print("输入学生"+del_student+"不存在")
+            print("输入学生",del_student,"不存在")
         else:
             info=''
             f = open(student_data_name,'w',encoding='utf-8')
@@ -90,23 +89,36 @@ def student_data_modify():
             print("目前暂时没有学生")
             break
         modify_student = input("请输入需要修改的学生：")
-        if modify_student not in modify_student:  #判断输入是否存在
-            print("输入学生"+del_student+"不存在")
+        if modify_student not in students:  #判断输入是否存在
+            print("输入学生",modify_student,"不存在")
         else:
-            info=''
+            info=''           
+            print('当前性别：',students[modify_student][0])
+            sex=input("性别：")
+            if sex=='':
+                sex=students[modify_student][0]
+            print('当前年龄：',students[modify_student][1])
+            age=input("年龄：")
+            if age=='':
+                age=students[modify_student][1]
+            print('当前语文成绩：',students[modify_student][2][0])
+            src_ch=input("语文成绩：")
+            if src_ch=='':
+                src_ch=students[modify_student][2][0]
+            print('当前数学成绩：',students[modify_student][2][1])
+            math_src=input("数学成绩：")
+            if math_src=='':
+                math_src=students[modify_student][2][1]
+            print('当前英语成绩：',students[modify_student][2][2])
+            en_src=input("英语成绩")
+            if en_src=='':
+                en_src=students[modify_student][2][2]
+            s=modify_student+':'+sex+':'+age+':'+src_ch+':'+math_src+':'+en_src+'\n'
             f = open(student_data_name,'w',encoding='utf-8')
             for key in students: #删除指定行
                 if key != modify_student:
                     info +=''.join((key+":"+students[key][0]+":",students[key][1]+":",students[key][2][0]+":",students[key][2][1]+":",students[key][2][2] +"\n"))
-           
-            sex=input("性别：")
-            age=input("年龄：")
-            src_ch=input("语文成绩：")
-            math_src=input("数学成绩：")
-            en_src=input("英语成绩")
-            s=modify_student+':'+sex+':'+age+':'+src_ch+':'+math_src+':'+en_src+'\n'
             info+=s
-            
             f.write(info)
             f.close()
     
